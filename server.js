@@ -19,7 +19,9 @@ mongo()
 
 // Routers
 const Auth = require('./routes/auth')
+const Meals = require('./routes/meals')
 app.use('/api/auth', Auth)
+app.use('/api/meals', Meals)
 
 // Default view
 app.get('/',(req,res)=>{

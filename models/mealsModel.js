@@ -2,14 +2,15 @@ const mongoose = require('mongoose')
 let Crypt = require('../common/helper/crypt').crypt
 let crypt = new Crypt()
 
-const UserSchema = new mongoose.Schema({
-    email:{
+
+const mealsSchema = new mongoose.Schema({
+    mealName:{
         type:String,
         required:true,
         index: { unique: true }
     },
-    password: {
-        type:String,
+    calories: {
+        type:Number,
         required:true
     },
     isActive: {
@@ -17,7 +18,6 @@ const UserSchema = new mongoose.Schema({
         trim: true,
         default: true
     }
-
 },{
     timestamps:{
         createdAt:"createdAt",
@@ -25,11 +25,4 @@ const UserSchema = new mongoose.Schema({
     }
 })
 
-//@ mongoose pre hook(middleware)
-UserSchema.pre('save', function (next) {
-    //@hash password using MD5
-    this.password = crypt.hash(this.password);
-    next();
-});
-
-module.exports = mongoose.model('auth' , UserSchema)
+module.exports = mongoose.model('meals' , mealsSchema)

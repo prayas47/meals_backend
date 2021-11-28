@@ -15,7 +15,6 @@ class Crypt {
     verify(token) {
         try {
             let decoded = jwtToken.decode(token, {complete: true});
-            console.log("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@22" , decoded)
             if (decoded === null) {
                 return false;
             } else {
