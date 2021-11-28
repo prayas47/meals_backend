@@ -1,4 +1,5 @@
-const mongoose = require('mongoose')
+const mongoose = require('mongoose'),
+Schema   = mongoose.Schema;
 let Crypt = require('../common/helper/crypt').crypt
 let crypt = new Crypt()
 
@@ -12,6 +13,10 @@ const mealsSchema = new mongoose.Schema({
     calories: {
         type:Number,
         required:true
+    },
+    userId : {
+        type: Schema.Types.ObjectId ,
+        default: null
     },
     isActive: {
         type: Boolean,

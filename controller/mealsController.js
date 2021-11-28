@@ -1,6 +1,7 @@
 let validation = require('../common/validation/validation')
 let valid = new validation.validation();
-
+const mongoose = require('mongoose'),
+ObjectId = mongoose.Types.ObjectId;
 const SendResponse  = require('../common/errors/response')
 
 const mealsModel = require('../models/mealsModel')
@@ -15,11 +16,12 @@ class Main {
             let obj = {
                 mealName : json.mealName,
                 calories : json.calories,
+                userId   : req.tokenInfo._id
             }
 
             await valid.mealsValidation(obj).then(async(checkmeals) => {
                 if(checkmeals == true){
-                    await mealsModel.findOne({mealName : obj.mealName} , {mealName : 1}).then(async(cateData) => {
+                    await mealsModel.findOne({$and:[{mealName : obj.mealName},{userId : obj.userId}] }, {mealName : 1}).then(async(cateData) => {
                         if(cateData){
                             const response = SendResponse(400 , true , "Meal Already Exist", null)
                             return res.status(response.status).send(response)
@@ -61,7 +63,9 @@ class Main {
             let end = new Date();
             end.setHours(23,59,59,999);
                 
+            let id = req.tokenInfo._id
             mealsModel.aggregate([
+
                 {
                     $match:  {
                         $and:[{
@@ -70,7 +74,12 @@ class Main {
                             }
                         },{
                                 isActive:true
+                        },
+                        {
+                            userId:{
+                                $eq:ObjectId(id)
                             }
+                          }
                         ]
                     }
                 },

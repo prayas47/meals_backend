@@ -38,10 +38,11 @@ class Middleware {
             } else {
                 if (decodeToken.exp > endTime) {
                     return userModel.findOne({
+                        _id     : decodeToken._id,
                         email   : decodeToken.email
                     }) 
-                    .then((company) => {
-                        if(company != null) {
+                    .then((data) => {
+                        if(data != null) {
                             req.tokenInfo = decodeToken
                             next()
                         } else {
